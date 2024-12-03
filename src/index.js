@@ -38,6 +38,17 @@ const updateLandscape = () => {
   }
 }
 
+
+const input = document.querySelector("input");
+const log = document.getElementById("values");
+
+input.addEventListener("input", updateValue);
+
+function updateValue(e) {
+  log.textContent = e.target.value;
+}
+
+
 const registerEventHandlers = (event) => {
   loadControls();
   increaseTempControl.addEventListener('click', () => {
@@ -48,6 +59,10 @@ const registerEventHandlers = (event) => {
     updateTemp(-1);
     updateLandscape();
   });
+
 }
 
+
 document.addEventListener('DOMContentLoaded', registerEventHandlers);
+
+
