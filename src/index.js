@@ -1,21 +1,26 @@
 "use strict";
 
-const loadControls = () => {
-  const increaseTempControl = document.getElementById('increaseTempControl');
-  const decreaseTempControl = document.getElementById('decreaseTempControl');
-  const tempValue = document.getElementById('tempValue');
-  const landscape = document.getElementById('landscape');
-  const currentTempButton = document.getElementById('currentTempButton');
-}
+// GLOBAL VARIABLES
+const increaseTempControl = document.getElementById('increaseTempControl');
+const decreaseTempControl = document.getElementById('decreaseTempControl');
+const tempValue = document.getElementById('tempValue');
+const landscape = document.getElementById('landscape');
+const currentTempButton = document.getElementById('currentTempButton');
+const cityNameInput = document.getElementById('cityNameInput');
+const headerCityName = document.getElementById('headerCityName');
+const skySelect = document.getElementById('skySelect');
+const sky = document.getElementById('sky')
+const gardenSection = document.getElementById('gardenSection');
+const cityNameReset = document.getElementById('cityNameReset');
+
 
 const defaultTemp = () => {
-  const tempValue = document.getElementById('tempValue');
   const defaultTemperature = 70;
-
   tempValue.textContent = defaultTemperature;
   updateLandscape();
 }
 
+// WAVE 2
 const updateTemp = (increment) => {
   let currentTemp = parseInt(tempValue.textContent);
   tempValue.textContent = currentTemp + increment;
@@ -49,10 +54,8 @@ const updateLandscape = () => {
   }
 }
 
+// WAVE 3
 const updateCityName = () => {
-  const cityNameInput = document.getElementById('cityNameInput');
-  const headerCityName = document.getElementById('headerCityName');
-
   cityNameInput.addEventListener("input", updateValue);
 
   function updateValue(e) {
@@ -60,6 +63,7 @@ const updateCityName = () => {
   }
 }
 
+// WAVE 4
 const findLatitudeAndLongitude = async (query) => {
   try {
     const response = await axios
@@ -99,53 +103,47 @@ const findWeather = async (lat, lon) => {
     return null;
   }
 }
+
+// WAVE 5
 const changeSky = () => {
-  const skySelect = document.getElementById('skySelect');
-  const sky = document.getElementById('sky')
-  const gardenSection = document.getElementById('gardenSection');
-  gardenSection.classList.remove('sunny','cloudy','rainy','snowy');
   skySelect.addEventListener('change', () => {
+    gardenSection.classList.remove('sunny','cloudy','rainy','snowy');
+
     if (skySelect.value == 'sunny') {
-      onchange = event => {
       sky.textContent = `☁️ ☁️ ☁️ ☀️ ☁️ ☁️`;
       gardenSection.classList.add('sunny');
-    }}
-    else if  (skySelect.value == 'cloudy') {
-      onchange = event => {
+    } else if (skySelect.value == 'cloudy') {
       sky.textContent =`☁️☁️ ☁️ ☁️☁️ ☁️ 🌤 ☁️ ☁️☁️`;
       gardenSection.classList.add('cloudy');
-    }}
-    else if  (skySelect.value == 'rainy') {
-      onchange = event => {
+    } else if (skySelect.value == 'rainy') {
       sky.textContent = `🌧🌈⛈🌧🌧💧⛈🌧🌦🌧💧🌧🌧`;
       gardenSection.classList.add('rainy');
-    }}
-      else if  (skySelect.value == 'snowy') {
-        onchange = event => {
-        sky.textContent = `🌨❄️🌨🌨❄️❄️🌨❄️🌨❄️❄️🌨🌨`;
+    } else if (skySelect.value == 'snowy') {
+      sky.textContent = `🌨❄️🌨🌨❄️❄️🌨❄️🌨❄️❄️🌨🌨`;
         gardenSection.classList.add('snowy');
-      }}
-      
-  })
+    }
+  });
 }
 
+// WAVE 6
 const resetCityName = () => {
-  const cityNameReset = document.getElementById('cityNameReset');
-  
   cityNameReset.addEventListener('click', () => {
     cityNameInput.value = '';
     headerCityName.textContent = '';
-  })
+  });
 }
 
+
+// Registering event handlers
 const registerEventHandlers = (event) => {
-  loadControls();
   increaseTempControl.addEventListener('click', () => {
     updateTemp(1);
   });
+
   decreaseTempControl.addEventListener('click', () => {
     updateTemp(-1);
   });
+  
   currentTempButton.addEventListener('click', async () => {
     const query = headerCityName.textContent;
     const temp = await findLatitudeAndLongitude(query);
@@ -163,11 +161,9 @@ const registerEventHandlers = (event) => {
   resetCityName();
 }
 
-
 document.addEventListener('DOMContentLoaded', () => {
   registerEventHandlers();
   defaultTemp();
-
 });
 
 
