@@ -1,10 +1,13 @@
 "use strict";
 
+let weatherData;
+
 const loadControls = () => {
   const increaseTempControl = document.getElementById('increaseTempControl');
   const decreaseTempControl = document.getElementById('decreaseTempControl');
   const tempValue = document.getElementById('tempValue');
   const landscape = document.getElementById('landscape');
+  const currentTempButton = document.getElementById('currentTempButton');
 }
 
 const updateTemp = (increment) => {
@@ -49,6 +52,82 @@ const updateCityName = () => {
   }
 }
 
+const findLatitudeAndLongitude = (query) => {
+  let latitude, longitude;
+  axios
+    .get('http://127.0.0.1:5000/location', {
+      params: {
+        q: query,
+        format: 'json'
+      }
+    })
+    .then( (response) => {
+      latitude = response.data[0].lat;
+      longitude = response.data[0].lon;
+      console.log('success in findLatitudeAndLongitude!', 'latitude:',latitude, 'longitude:',longitude);
+      return findWeather(latitude, longitude);
+  })
+    .catch((error) => {
+      console.log(error);
+  });
+}
+
+const findWeather = (lat, lon) => {
+  axios
+    .get('http://127.0.0.1:5000/weather', {
+      params: {
+        format: 'json',
+        lat: lat,
+        lon: lon,
+      }
+    })
+    .then( (response) => {
+      console.log('success in findLocation!', response.data);
+      return response.data.main.temp;
+    })
+    .catch( (error) => {
+      console.log('error in findLocation!');
+    });
+  }
+
+const findLatitudeAndLongitude = (query) => {
+  let latitude, longitude;
+  axios
+    .get('http://127.0.0.1:5000/location', {
+      params: {
+        q: query,
+        format: 'json'
+      }
+    })
+    .then( (response) => {
+      latitude = response.data[0].lat;
+      longitude = response.data[0].lon;
+      console.log('success in findLatitudeAndLongitude!', 'latitude:',latitude, 'longitude:',longitude);
+      return findWeather(latitude, longitude);
+  })
+    .catch((error) => {
+      console.log(error);
+  });
+}
+
+const findWeather = (lat, lon) => {
+  axios
+    .get('http://127.0.0.1:5000/weather', {
+      params: {
+        format: 'json',
+        lat: lat,
+        lon: lon,
+      }
+    })
+    .then( (response) => {
+      console.log('success in findLocation!', response.data);
+      return response.data.main.temp;
+    })
+    .catch( (error) => {
+      console.log('error in findLocation!');
+    });
+  }
+
 const registerEventHandlers = (event) => {
   loadControls();
   increaseTempControl.addEventListener('click', () => {
@@ -59,7 +138,11 @@ const registerEventHandlers = (event) => {
     updateTemp(-1);
     updateLandscape();
   });
-  updateCityName();
+  currentTempButton.addEventListener('click', () => {
+    const query = log.textContent;
+    const realTimeTemp = findLatitudeAndLongitude(query);
+    tempValue.textContent = realTimeTemp;
+  })
 }
 
 
