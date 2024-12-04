@@ -105,20 +105,28 @@ const changeSky = () => {
   skySelect.addEventListener('change', () => {
     if (skySelect.value == 'sunny') {
       onchange = event => {
-      sky.textContent = `"☁️ ☁️ ☁️ ☀️ ☁️ ☁️"`}}
+      sky.textContent = `☁️ ☁️ ☁️ ☀️ ☁️ ☁️`}}
     else if  (skySelect.value == 'cloudy') {
       onchange = event => {
-      sky.textContent =`"☁️☁️ ☁️ ☁️☁️ ☁️ 🌤 ☁️ ☁️☁️"` }}
+      sky.textContent =`☁️☁️ ☁️ ☁️☁️ ☁️ 🌤 ☁️ ☁️☁️` }}
     else if  (skySelect.value == 'rainy') {
       onchange = event => {
-      sky.textContent = `"🌧🌈⛈🌧🌧💧⛈🌧🌦🌧💧🌧🌧"` }}
+      sky.textContent = `🌧🌈⛈🌧🌧💧⛈🌧🌦🌧💧🌧🌧` }}
       else if  (skySelect.value == 'snowy') {
         onchange = event => {
-        sky.textContent = `"🌨❄️🌨🌨❄️❄️🌨❄️🌨❄️❄️🌨🌨"` }}
+        sky.textContent = `🌨❄️🌨🌨❄️❄️🌨❄️🌨❄️❄️🌨🌨` }}
       
   })
 }
 
+const resetCityName = () => {
+  const cityNameReset = document.getElementById('cityNameReset');
+  
+  cityNameReset.addEventListener('click', () => {
+    cityNameInput.value = '';
+    headerCityName.textContent = '';
+  })
+}
 
 const registerEventHandlers = (event) => {
   loadControls();
@@ -142,7 +150,7 @@ const registerEventHandlers = (event) => {
 
   updateCityName();
   changeSky();
-
+  resetCityName();
 }
 
 
