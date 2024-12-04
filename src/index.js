@@ -38,16 +38,16 @@ const updateLandscape = () => {
   }
 }
 
+const updateCityName = () => {
+  const cityNameInput = document.getElementById('cityNameInput');
+  const headerCityName = document.getElementById('headerCityName');
 
-const input = document.querySelector("input");
-const log = document.getElementById("values");
+  cityNameInput.addEventListener("input", updateValue);
 
-input.addEventListener("input", updateValue);
-
-function updateValue(e) {
-  log.textContent = e.target.value;
+  function updateValue(e) {
+    headerCityName.textContent = e.target.value;
+  }
 }
-
 
 const registerEventHandlers = (event) => {
   loadControls();
@@ -59,7 +59,7 @@ const registerEventHandlers = (event) => {
     updateTemp(-1);
     updateLandscape();
   });
-
+  updateCityName();
 }
 
 
