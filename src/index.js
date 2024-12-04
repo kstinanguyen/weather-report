@@ -99,6 +99,25 @@ const findWeather = async (lat, lon) => {
     return null;
   }
 }
+const changeSky = () => {
+  const skySelect = document.getElementById('skySelect');
+  const sky = document.getElementById('sky')
+  skySelect.addEventListener('change', () => {
+    if (skySelect.value == 'sunny') {
+      onchange = event => {
+      sky.textContent = `"☁️ ☁️ ☁️ ☀️ ☁️ ☁️"`}}
+    else if  (skySelect.value == 'cloudy') {
+      onchange = event => {
+      sky.textContent =`"☁️☁️ ☁️ ☁️☁️ ☁️ 🌤 ☁️ ☁️☁️"` }}
+    else if  (skySelect.value == 'rainy') {
+      onchange = event => {
+      sky.textContent = `"🌧🌈⛈🌧🌧💧⛈🌧🌦🌧💧🌧🌧"` }}
+      else if  (skySelect.value == 'snowy') {
+        onchange = event => {
+        sky.textContent = `"🌨❄️🌨🌨❄️❄️🌨❄️🌨❄️❄️🌨🌨"` }}
+      
+  })
+}
 
 
 const registerEventHandlers = (event) => {
@@ -122,12 +141,15 @@ const registerEventHandlers = (event) => {
   });
 
   updateCityName();
+  changeSky();
+
 }
 
 
 document.addEventListener('DOMContentLoaded', () => {
   registerEventHandlers();
   defaultTemp();
+
 });
 
 
