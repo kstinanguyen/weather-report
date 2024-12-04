@@ -102,19 +102,29 @@ const findWeather = async (lat, lon) => {
 const changeSky = () => {
   const skySelect = document.getElementById('skySelect');
   const sky = document.getElementById('sky')
+  const gardenSection = document.getElementById('gardenSection');
+  gardenSection.classList.remove('sunny','cloudy','rainy','snowy');
   skySelect.addEventListener('change', () => {
     if (skySelect.value == 'sunny') {
       onchange = event => {
-      sky.textContent = `☁️ ☁️ ☁️ ☀️ ☁️ ☁️`}}
+      sky.textContent = `☁️ ☁️ ☁️ ☀️ ☁️ ☁️`;
+      gardenSection.classList.add('sunny');
+    }}
     else if  (skySelect.value == 'cloudy') {
       onchange = event => {
-      sky.textContent =`☁️☁️ ☁️ ☁️☁️ ☁️ 🌤 ☁️ ☁️☁️` }}
+      sky.textContent =`☁️☁️ ☁️ ☁️☁️ ☁️ 🌤 ☁️ ☁️☁️`;
+      gardenSection.classList.add('cloudy');
+    }}
     else if  (skySelect.value == 'rainy') {
       onchange = event => {
-      sky.textContent = `🌧🌈⛈🌧🌧💧⛈🌧🌦🌧💧🌧🌧` }}
+      sky.textContent = `🌧🌈⛈🌧🌧💧⛈🌧🌦🌧💧🌧🌧`;
+      gardenSection.classList.add('rainy');
+    }}
       else if  (skySelect.value == 'snowy') {
         onchange = event => {
-        sky.textContent = `🌨❄️🌨🌨❄️❄️🌨❄️🌨❄️❄️🌨🌨` }}
+        sky.textContent = `🌨❄️🌨🌨❄️❄️🌨❄️🌨❄️❄️🌨🌨`;
+        gardenSection.classList.add('snowy');
+      }}
       
   })
 }
