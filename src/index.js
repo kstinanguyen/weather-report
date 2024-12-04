@@ -8,6 +8,14 @@ const loadControls = () => {
   const currentTempButton = document.getElementById('currentTempButton');
 }
 
+const defaultTemp = () => {
+  const tempValue = document.getElementById('tempValue');
+  const defaultTemperature = 70;
+
+  tempValue.textContent = defaultTemperature;
+  updateLandscape();
+}
+
 const updateTemp = (increment) => {
   let currentTemp = parseInt(tempValue.textContent);
   tempValue.textContent = currentTemp + increment;
@@ -24,6 +32,8 @@ const updateTemp = (increment) => {
   } else {
     tempValue.classList.add('turqoise');
   }
+
+  updateLandscape();
 }
 
 const updateLandscape = () => {
@@ -95,11 +105,9 @@ const registerEventHandlers = (event) => {
   loadControls();
   increaseTempControl.addEventListener('click', () => {
     updateTemp(1);
-    updateLandscape();
   });
   decreaseTempControl.addEventListener('click', () => {
     updateTemp(-1);
-    updateLandscape();
   });
   currentTempButton.addEventListener('click', async () => {
     const query = headerCityName.textContent;
@@ -117,6 +125,9 @@ const registerEventHandlers = (event) => {
 }
 
 
-document.addEventListener('DOMContentLoaded', registerEventHandlers);
+document.addEventListener('DOMContentLoaded', () => {
+  registerEventHandlers();
+  defaultTemp();
+});
 
 
