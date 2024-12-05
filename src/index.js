@@ -17,22 +17,30 @@ const cityNameReset = document.getElementById('cityNameReset');
 const defaultTemp = () => {
   const defaultTemperature = 70;
   tempValue.textContent = defaultTemperature;
+  updateTempColor(defaultTemperature);
   updateLandscape();
 }
 
 // WAVE 2
 const updateTemp = (increment) => {
   let currentTemp = parseInt(tempValue.textContent);
-  tempValue.textContent = currentTemp + increment;
+  let newTemp = currentTemp + increment;
 
+  tempValue.textContent = newTemp;
+
+  updateTempColor(newTemp);
+}
+
+const updateTempColor = (temperature) => {
   tempValue.classList.remove('red','orange','yellow','green','turqoise');
-  if (currentTemp >= 79) {
+
+  if (temperature > 79) {
     tempValue.classList.add('red');
-  } else if (currentTemp >= 69) {
+  } else if (temperature > 69) {
     tempValue.classList.add('orange');
-  } else if (currentTemp >= 59) {
+  } else if (temperature > 59) {
     tempValue.classList.add('yellow');
-  } else if (currentTemp >= 49) {
+  } else if (temperature > 49) {
     tempValue.classList.add('green');
   } else {
     tempValue.classList.add('turqoise');
@@ -43,6 +51,7 @@ const updateTemp = (increment) => {
 
 const updateLandscape = () => {
   let currentTemp = parseInt(tempValue.textContent);
+
   if (currentTemp >= 79) {
     landscape.textContent = '🌵__🐍_🦂_🌵🌵__🐍_🏜_🦂';
   } else if (currentTemp >= 69) {
@@ -109,7 +118,9 @@ const changeSky = () => {
   skySelect.addEventListener('change', () => {
     gardenSection.classList.remove('sunny','cloudy','rainy','snowy');
 
-    if (skySelect.value == 'sunny') {
+    if (skySelect.value == 'default') {
+      sky.textContent = '';
+    } else if (skySelect.value == 'sunny') {
       sky.textContent = `☁️ ☁️ ☁️ ☀️ ☁️ ☁️`;
       gardenSection.classList.add('sunny');
     } else if (skySelect.value == 'cloudy') {
@@ -151,6 +162,7 @@ const registerEventHandlers = (event) => {
     
     if (realTimeTemp !== null) {
       tempValue.textContent = realTimeTemp; 
+      updateTempColor(realTimeTemp);
     } else {
       tempValue.textContent = 'cannot find temperature'; 
     }
