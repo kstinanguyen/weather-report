@@ -12,7 +12,9 @@ const skySelect = document.getElementById('skySelect');
 const sky = document.getElementById('sky')
 const gardenSection = document.getElementById('gardenSection');
 const cityNameReset = document.getElementById('cityNameReset');
+const horizonColor = document.getElementById('horizonColor');
 
+horizonColor.classList.add('sky-gradient-00');
 
 const defaultTemp = () => {
   const defaultTemperature = 70;
@@ -34,17 +36,12 @@ const updateTemp = (increment) => {
 const updateTempColor = (temperature) => {
   tempValue.classList.remove('red','orange','yellow','green','turqoise');
 
-  if (temperature > 79) {
-    tempValue.classList.add('red');
-  } else if (temperature > 69) {
-    tempValue.classList.add('orange');
-  } else if (temperature > 59) {
-    tempValue.classList.add('yellow');
-  } else if (temperature > 49) {
-    tempValue.classList.add('green');
-  } else {
-    tempValue.classList.add('turqoise');
-  }
+  const tempClass = temperature > 79 ? 'red' :
+  temperature > 69 ? 'orange' :
+  temperature > 59 ? 'yellow' :
+  temperature > 49 ? 'green' : 'turqoise';
+
+  tempValue.classList.add(tempClass);
 
   updateLandscape();
 }
@@ -52,14 +49,21 @@ const updateTempColor = (temperature) => {
 const updateLandscape = () => {
   let currentTemp = parseInt(tempValue.textContent);
 
+  const landscapes = {
+    "hot": '🌵__🐍_🦂_🌵🌵__🐍_🏜_🦂',
+    "warm": '🌸🌿🌼__🌷🌻🌿_☘️🌱_🌻🌷',
+    "moderate": '🌾🌾_🍃_🪨__🛤_🌾🌾🌾_🍃',
+    "cold": '🌲🌲⛄️🌲⛄️🍂🌲🍁🌲🌲⛄️🍂🌲'
+  };
+
   if (currentTemp >= 79) {
-    landscape.textContent = '🌵__🐍_🦂_🌵🌵__🐍_🏜_🦂';
+    landscape.textContent = landscapes.hot;
   } else if (currentTemp >= 69) {
-    landscape.textContent = '🌸🌿🌼__🌷🌻🌿_☘️🌱_🌻🌷';
+    landscape.textContent = landscapes.warm;
   } else if (currentTemp >= 59) {
-    landscape.textContent = '🌾🌾_🍃_🪨__🛤_🌾🌾🌾_🍃';
+    landscape.textContent = landscapes.moderate;
   } else {
-    landscape.textContent = '🌲🌲⛄️🌲⛄️🍂🌲🍁🌲🌲⛄️🍂🌲';
+    landscape.textContent = landscapes.cold;
   }
 }
 
@@ -87,7 +91,7 @@ const findLatitudeAndLongitude = async (query) => {
     const longitude = response.data[0].lon;
     console.log('success in findLatitudeAndLongitude!', 'latitude:', latitude, 'longitude:', longitude);
 
-    return await findWeather(latitude, longitude);
+    return await findWeatherAndTime(latitude, longitude);
   } catch (error) {
     console.log(error);
     return null;
@@ -111,6 +115,57 @@ const findWeather = async (lat, lon) => {
     console.log('error in findWeather!');
     return null;
   }
+}
+
+//optional enhancements//
+const getLocalTime = async (lat, lon) => {
+  try {
+    const response = await axios
+      .get('http://127.0.0.1:5000/timezone', {
+        params: {
+          format: 'json',
+          lat: lat,
+          lng: lon,
+        }
+      });
+    
+    console.log('success in getLocalTime!', response.data);
+    const formattedTime = response.data.formatted;
+    updateBodyBackground(formattedTime);
+    return extractTime(formattedTime);
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
+const extractTime = (formattedTime) => {
+  if (formattedTime) {
+    const timeString = formattedTime.split(' ')[1];  // Get time part (HH:MM:SS)
+    return timeString;
+  }
+  return null;
+}
+
+const findWeatherAndTime = async (lat, lon) => {
+  try {
+    const weatherData = await findWeather(lat, lon);
+    console.log('Weather data:', weatherData);
+
+    const localTime = await getLocalTime(lat, lon);
+    console.log('Local Time:', localTime);
+
+    return { weather: weatherData, localTime };
+  } catch (error) {
+    console.log('Error in findWeatherAndTime:', error);
+    return null;
+  }
+}
+
+const updateBodyBackground = (localTime) => {
+  const hour = new Date(localTime).getHours();
+  horizonColor.className = ''; // Clear all classes
+  horizonColor.classList.add(`sky-gradient-${hour < 10 ? '0' : ''}${hour}`); // Adds correct class based on hour
 }
 
 // WAVE 5
@@ -157,8 +212,8 @@ const registerEventHandlers = (event) => {
   
   currentTempButton.addEventListener('click', async () => {
     const query = headerCityName.textContent;
-    const temp = await findLatitudeAndLongitude(query);
-    let realTimeTemp = Math.round(temp);
+    const { weather, localTime } = await findLatitudeAndLongitude(query);
+    let realTimeTemp = Math.round(weather);
     
     if (realTimeTemp !== null) {
       tempValue.textContent = realTimeTemp; 
